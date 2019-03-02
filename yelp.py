@@ -35,7 +35,7 @@ def find_suggestions(location, category, radius, money, is_open=True):
     # dummy suggestions list
     suggestions = {'id':{'name':'thisname'}, 'newid':{'name':'newname'}}
 
-    print(results)
+    # print(results)
 
     final = []
     for business in results:
