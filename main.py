@@ -1,14 +1,15 @@
 import sys
 from flask import (Flask,
-    request,
-    jsonify)
+                   request,
+                   jsonify,
+                   render_template, url_for)
 from flask_api import status
 import yelp
 
 # Use Flask / etc to design a REST API for WhatsNext back-end.
 
 # Create the application instance
-app = Flask(__name__, template_folder="")
+app = Flask(__name__, template_folder="", static_url_path='/static')
 
 ENDPOINTS = [
     "GET /",
@@ -52,9 +53,7 @@ def find():
             return jsonify(restaurants), status.HTTP_200_OK
 
 
-@app.route('/categories', methods=['GET'])
-def categories():
-    category_list = [
+CATEGORY_LIST = [
         "american",
         "seafood",
         "asian",
@@ -63,8 +62,25 @@ def categories():
         "breakfast",
         "pasta"
     ]
-    return jsonify(category_list)
 
+
+@app.route('/categories', methods=['GET'])
+def categories():
+    return jsonify(CATEGORY_LIST)
+
+
+@app.route('/images', methods=['GET'])
+def images():
+    if 'name' not in request.args:
+        return "Bad request. Check image name.", status.HTTP_400_BAD_REQUEST
+    else:
+        name = request.args['name']
+        img_filename = 'img.png'
+
+        if name == 'american':
+            img_filename = 'burger.png'
+
+        return request.host_url[:-1] + url_for('static', filename=img_filename)
 
 # start flask application
 if __name__ == '__main__':
