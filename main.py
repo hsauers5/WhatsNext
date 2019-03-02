@@ -78,6 +78,10 @@ def log():
     address = request.form['address']
     category = request.form['category']
     price = request.form['price']
+
+    if len(biz_name) > 50 or len(address) > 50 or len(category) > 10 or price not in ['1','2','3','4']:
+        return "Bad request.", status.HTTP_400_BAD_REQUEST
+
     userdata = {}
     if 'userdata' in request.form:
         userdata = request.form['userdata']
