@@ -46,7 +46,7 @@ def find_suggestions(location, category, radius, money, is_open=True):
         final = []
         for business in results:
             biz = {'name': business['name'], 'phone': business['display_phone'], 'price': business['price'],
-                     'image': business['image_url'],
+                     'image': business['image_url'], 'rating': business['rating'],
                      'address': business['location']['display_address'][0] + " " + business['location']['display_address'][1]}
             final.append(biz)
 
