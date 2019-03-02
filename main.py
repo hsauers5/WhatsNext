@@ -5,6 +5,7 @@ from flask import (Flask,
     jsonify,
     session)
 from http import HTTPStatus
+from flask_api import status
 import creds
 import yelp
 
@@ -17,19 +18,19 @@ app = Flask(__name__, template_folder="")
 # Create a URL route in our application for "/"
 @app.route('/')
 def home():
-    return jsonify(HTTPStatus.OK)
+    return jsonify(status.HTTP_200_OK)
 
 
 @app.route('/find', methods=['GET'])
 def find():
     if 'location' not in request.args:
-        return jsonify(HTTPStatus.BAD_REQUEST)
+        return "Bad request. Check params.", status.HTTP_400_BAD_REQUEST
     elif 'category' not in request.args:
-        return jsonify(HTTPStatus.BAD_REQUEST)
+        return "Bad request. Check params.", status.HTTP_400_BAD_REQUEST
     elif 'radius' not in request.args:
-        return jsonify(HTTPStatus.BAD_REQUEST)
+        return "Bad request. Check params.", status.HTTP_400_BAD_REQUEST
     elif 'money' not in request.args:
-        return jsonify(HTTPStatus.BAD_REQUEST)
+        return "Bad request. Check params.", status.HTTP_400_BAD_REQUEST
     else:
         location = request.args['location']
         category = request.args['category']
@@ -41,7 +42,12 @@ def find():
             if request.args['open'] == 'False' or request.args['open'] == "false":
                 open = False
 
-        return jsonify(yelp.find_suggestions(location=location, category=category, radius=radius, money=money, is_open=open))
+        restaurants = yelp.find_suggestions(location=location, category=category, radius=radius, money=money, is_open=open)
+
+        if len(restaurants) == 0:
+            return "None found.", status.HTTP_400_BAD_REQUEST
+        else:
+            return jsonify(restaurants)
 
 
 # start flask application
