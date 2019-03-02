@@ -35,7 +35,13 @@ def find():
         category = request.args['category']
         radius = int(request.args['radius'])
         money = int(request.args['money'])
-        return jsonify(yelp.find_suggestions(location=location, category=category, radius=radius, money=money))
+
+        open = True
+        if 'open' in request.args:
+            if request.args['open'] == 'False' or request.args['open'] == "false":
+                open = False
+
+        return jsonify(yelp.find_suggestions(location=location, category=category, radius=radius, money=money, is_open=open))
 
 
 # start flask application

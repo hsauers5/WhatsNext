@@ -6,20 +6,9 @@ YELP_API = "Bearer " + creds.get_yelp_creds()
 API_URL = "https://api.yelp.com/v3/businesses/search"
 MIN_RATING = 3.8
 
-"""
-term: category
-location: literal address
-rating: 4 (literal)
-radius: meters
-price: money
-limit: # of results to return
-
-auth: bearer token, from YELP_API
-"""
-
 
 # finds suggestions via yelp api
-def find_suggestions(location, category, radius, money):
+def find_suggestions(location, category, radius, money, is_open=True):
     # convert into meters for yelp api
     radius = convert_to_meters(radius)
 
@@ -28,7 +17,8 @@ def find_suggestions(location, category, radius, money):
         'location': location,
         'radius': radius,
         'price': money,
-        'limit': 10
+        'limit': 10,
+        'open_now': is_open
     }
 
     req = requests.get(url=API_URL, params=params, headers={"Authorization": YELP_API})
