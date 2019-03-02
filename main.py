@@ -5,7 +5,7 @@ from flask import (Flask,
                    jsonify,
                    render_template, url_for)
 from flask_api import status
-import yelp
+import yelp, google
 
 # Use Flask / etc to design a REST API for WhatsNext back-end.
 
@@ -68,6 +68,28 @@ CATEGORY_LIST = [
 @app.route('/categories', methods=['GET'])
 def categories():
     return jsonify(CATEGORY_LIST)
+
+
+# requries bizname, address, category, price
+@app.route('/log', methods=['POST'])
+def log():
+    # params: restaurant name, address, category, price, OPTIONAL userdata
+    biz_name = request.form['bizname']
+    address = request.form['address']
+    category = request.form['category']
+    price = request.form['price']
+    userdata = {}
+    if 'userdata' in request.form:
+        userdata = request.form['userdata']
+    form_data = {
+            "bizname": biz_name, 
+	    "address": address, 
+	    "category": category, 
+	    "price": price, 
+	    "userdata": userdata, 
+	   }
+    google.post_to_firebase(form_data)
+    return "Success.", status.HTTP_200_OK    
 
 
 @app.route('/images', methods=['GET'])
