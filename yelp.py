@@ -12,12 +12,16 @@ def find_suggestions(location, category, radius, money, is_open=True):
     # convert into meters for yelp api
     radius = convert_to_meters(radius)
 
+    money_arr = []
+    for i in range(1, money+1):
+        money_arr.append(i)
+
     params = {
         'term': category,
         'location': location,
 	'categories': 'restaurants',
         'radius': radius,
-        'price': money,
+        'price': money_arr,
         'limit': 10,
         'open_now': is_open
     }
