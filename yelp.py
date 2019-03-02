@@ -15,6 +15,7 @@ def find_suggestions(location, category, radius, money, is_open=True):
     params = {
         'term': category,
         'location': location,
+	'categories': 'restaurants',
         'radius': radius,
         'price': money,
         'limit': 10,
