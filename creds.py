@@ -1,16 +1,17 @@
 # manage credentials
 
+
 def get_google_creds():
     with open("googleapi.txt") as creds:
-        GOOGLE_API = creds.readlines()[0]
-        if '\n' in GOOGLE_API:
-            GOOGLE_API.replace('\n', '')
-    return GOOGLE_API
+        google_api = creds.readlines()[0]
+        if '\n' in google_api:
+            google_api.replace('\n', '')
+    return google_api
 
 
 def get_yelp_creds():
     with open("yelpapi.txt") as creds:
-        YELP_API = creds.readlines()[0]
-        if '\n' in YELP_API:
-            YELP_API.replace('\n', '')
-    return YELP_API
+        yelp_api = creds.readlines()[0]
+        if '\n' in yelp_api:
+            yelp_api.replace('\n', '')
+    return yelp_api
