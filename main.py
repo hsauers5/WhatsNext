@@ -33,12 +33,12 @@ def find():
     else:
         location = request.args['location']
         category = request.args['category']
-        radius = request.args['radius']
-        money = request.args['money']
+        radius = int(request.args['radius'])
+        money = int(request.args['money'])
         return jsonify(yelp.find_suggestions(location=location, category=category, radius=radius, money=money))
 
 
 # start flask application
 if __name__ == '__main__':
-    yelp.find_suggestions('orlando', 'burgers', '5', '2')
+    yelp.find_suggestions('orlando', 'burgers', 5, 2)
     # app.run(debug=False, host='0.0.0.0')

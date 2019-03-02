@@ -1,6 +1,6 @@
 import creds
 import requests
-from flask import jsonify
+import json
 
 YELP_API = "Bearer " + creds.get_yelp_creds()
 API_URL = "https://api.yelp.com/v3/businesses/search"
@@ -25,14 +25,17 @@ def find_suggestions(location, category, radius, money):
     params = {
         'term': category,
         'location': location,
-        'radius': 8000,
+        'radius': radius,
         'price': money,
         'limit': 10
     }
 
     req = requests.get(url=API_URL, params=params, headers={"Authorization": YELP_API})
-    businesses = jsonify(req.content)
-    print(businesses)
+    content = req.content
+    # print(content)
+
+    biz = json.loads(content)
+    print(biz['businesses'])
 
     # dummy suggestions list
     suggestions = {'id':{'name':'thisname'}, 'newid':{'name':'newname'}}
