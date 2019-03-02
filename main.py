@@ -47,7 +47,7 @@ def find():
         if len(restaurants) == 0:
             return "None found.", status.HTTP_400_BAD_REQUEST
         else:
-            return jsonify(restaurants)
+            return jsonify(restaurants), status.HTTP_200_OK
 
 
 # start flask application
