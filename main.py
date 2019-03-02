@@ -10,11 +10,17 @@ import yelp
 # Create the application instance
 app = Flask(__name__, template_folder="")
 
+ENDPOINTS = [
+    "GET /",
+    "GET /find PARAMS location, category, radius, money, open",
+    "GET /categories"
+]
+
 
 # Create a URL route in our application for "/"
 @app.route('/')
 def home():
-    return jsonify(status.HTTP_200_OK)
+    return jsonify(ENDPOINTS), status.HTTP_200_OK
 
 
 @app.route('/find', methods=['GET'])
