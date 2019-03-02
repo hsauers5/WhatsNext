@@ -37,7 +37,14 @@ def find_suggestions(location, category, radius, money, is_open=True):
 
     print(results)
 
-    return results
+    final = []
+    for business in results:
+        biz = {'name': business['name'], 'phone': business['display_phone'], 'price': business['price'],
+                 'image': business['image_url'],
+                 'address': business['location']['display_address'][0] + " " + business['location']['display_address'][1]}
+        final.append(biz)
+
+    return final
 
 
 # convert to meters for yelp api
