@@ -4,6 +4,7 @@ import json
 
 YELP_API = "Bearer " + creds.get_yelp_creds()
 API_URL = "https://api.yelp.com/v3/businesses/search"
+MIN_RATING = 3.8
 
 """
 term: category
@@ -34,15 +35,19 @@ def find_suggestions(location, category, radius, money):
     content = req.content
     # print(content)
 
-    biz = json.loads(content)
-    print(biz['businesses'])
+    biz = json.loads(content)['businesses']
+
+    results = []
+    for business in biz:
+        if float(business['rating']) > MIN_RATING:
+            results.append(business)
 
     # dummy suggestions list
     suggestions = {'id':{'name':'thisname'}, 'newid':{'name':'newname'}}
 
-    # query yelp api for suggestions
+    print(results)
 
-    return suggestions
+    return results
 
 
 # convert to meters for yelp api

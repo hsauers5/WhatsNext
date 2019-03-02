@@ -40,5 +40,5 @@ def find():
 
 # start flask application
 if __name__ == '__main__':
-    yelp.find_suggestions('orlando', 'burgers', 5, 2)
-    # app.run(debug=False, host='0.0.0.0')
+    # yelp.find_suggestions('orlando', 'burgers', 5, 2)
+    app.run(debug=False, host='0.0.0.0')
