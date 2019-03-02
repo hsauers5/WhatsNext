@@ -1,12 +1,7 @@
 from flask import (Flask,
-    render_template,
     request,
-    redirect,
-    jsonify,
-    session)
-from http import HTTPStatus
+    jsonify)
 from flask_api import status
-import creds
 import yelp
 
 # Use Flask / etc to design a REST API for WhatsNext back-end.
