@@ -45,6 +45,20 @@ def find():
             return jsonify(restaurants), status.HTTP_200_OK
 
 
+@app.route('/categories', methods=['GET'])
+def categories():
+    categories = [
+        "american",
+        "seafood",
+        "asian",
+        "latin american",
+        "vegan friendly",
+        "breakfast",
+        "pasta"
+    ]
+    return categories
+
+
 # start flask application
 if __name__ == '__main__':
     # yelp.find_suggestions('orlando', 'burgers', 5, 2)

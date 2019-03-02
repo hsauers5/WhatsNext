@@ -21,30 +21,33 @@ def find_suggestions(location, category, radius, money, is_open=True):
         'open_now': is_open
     }
 
-    req = requests.get(url=API_URL, params=params, headers={"Authorization": YELP_API})
-    content = req.content
-    # print(content)
+    try:
+        req = requests.get(url=API_URL, params=params, headers={"Authorization": YELP_API})
+        content = req.content
+        # print(content)
 
-    biz = json.loads(content)['businesses']
+        biz = json.loads(content)['businesses']
 
-    results = []
-    for business in biz:
-        if float(business['rating']) > MIN_RATING:
-            results.append(business)
+        results = []
+        for business in biz:
+            if float(business['rating']) > MIN_RATING:
+                results.append(business)
 
-    # dummy suggestions list
-    suggestions = {'id':{'name':'thisname'}, 'newid':{'name':'newname'}}
+        # dummy suggestions list
+        suggestions = {'id':{'name':'thisname'}, 'newid':{'name':'newname'}}
 
-    # print(results)
+        # print(results)
 
-    final = []
-    for business in results:
-        biz = {'name': business['name'], 'phone': business['display_phone'], 'price': business['price'],
-                 'image': business['image_url'],
-                 'address': business['location']['display_address'][0] + " " + business['location']['display_address'][1]}
-        final.append(biz)
+        final = []
+        for business in results:
+            biz = {'name': business['name'], 'phone': business['display_phone'], 'price': business['price'],
+                     'image': business['image_url'],
+                     'address': business['location']['display_address'][0] + " " + business['location']['display_address'][1]}
+            final.append(biz)
 
-    return final
+        return final
+    except IndexError:
+        return []
 
 
 # convert to meters for yelp api
