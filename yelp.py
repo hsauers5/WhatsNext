@@ -23,8 +23,8 @@ def find_suggestions(location, category, radius, money, is_open=True):
 
     try:
         req = requests.get(url=API_URL, params=params, headers={"Authorization": YELP_API})
-        content = req.content
-        # print(content)
+        content = req.content.decode('utf-8')
+        # print(type(content))
 
         biz = json.loads(content)['businesses']
 
@@ -47,6 +47,8 @@ def find_suggestions(location, category, radius, money, is_open=True):
 
         return final
     except IndexError:
+        return []
+    except:
         return []
 
 
