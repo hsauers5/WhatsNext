@@ -1,3 +1,4 @@
+import sys
 from flask import (Flask,
     request,
     jsonify)
@@ -47,7 +48,7 @@ def find():
 
 @app.route('/categories', methods=['GET'])
 def categories():
-    categories = [
+    category_list = [
         "american",
         "seafood",
         "asian",
@@ -56,10 +57,13 @@ def categories():
         "breakfast",
         "pasta"
     ]
-    return categories
+    return jsonify(category_list)
 
 
 # start flask application
 if __name__ == '__main__':
     # yelp.find_suggestions('orlando', 'burgers', 5, 2)
-    app.run(debug=False, host='0.0.0.0')
+    port = 5000
+    if len(sys.argv) > 1:
+        port = int(sys.argv[1])
+    app.run(debug=False, host='0.0.0.0', port=port)
