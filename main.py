@@ -9,8 +9,6 @@ import creds
 import yelp
 
 # Use Flask / etc to design a REST API for WhatsNext back-end.
-# get creds
-GOOGLE_API = creds.get_google_creds()
 
 # Create the application instance
 app = Flask(__name__, template_folder="")
@@ -42,4 +40,5 @@ def find():
 
 # start flask application
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0')
+    yelp.find_suggestions('orlando', 'burgers', '5', '2')
+    # app.run(debug=False, host='0.0.0.0')
