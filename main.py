@@ -6,11 +6,11 @@ from flask import (Flask,
     session)
 from http import HTTPStatus
 import creds
+import yelp
 
 # Use Flask / etc to design a REST API for WhatsNext back-end.
 # get creds
 GOOGLE_API = creds.get_google_creds()
-YELP_API = creds.get_yelp_creds()
 
 # Create the application instance
 app = Flask(__name__, template_folder="")
@@ -26,8 +26,18 @@ def home():
 def find():
     if 'location' not in request.args:
         return jsonify(HTTPStatus.BAD_REQUEST)
+    elif 'category' not in request.args:
+        return jsonify(HTTPStatus.BAD_REQUEST)
+    elif 'radius' not in request.args:
+        return jsonify(HTTPStatus.BAD_REQUEST)
+    elif 'money' not in request.args:
+        return jsonify(HTTPStatus.BAD_REQUEST)
     else:
-        return jsonify(HTTPStatus.OK)
+        location = request.args['location']
+        category = request.args['category']
+        radius = request.args['radius']
+        money = request.args['money']
+        return jsonify(yelp.find_suggestions(location=location, category=category, radius=radius, money=money))
 
 
 # start flask application
