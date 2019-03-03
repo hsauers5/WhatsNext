@@ -7,6 +7,22 @@ API_URL = "https://api.yelp.com/v3/businesses/search"
 MIN_RATING = 3.8
 
 
+# returns the top review
+def get_review(biz_id):
+    review_url = "https://api.yelp.com/v3/businesses/" + biz_id + "/reviews"
+    req = requests.get(url=review_url, headers={"Authorization": YELP_API})
+    content = req.content.decode('utf-8')
+    reviews = json.loads(content)['reviews']
+
+    final_review = ""
+    for review in reviews:
+        if review['rating'] >= 4:
+            final_review = review['text']
+            break
+    final_review = '"' + final_review[:final_review.index(".")+1] + '"'
+    return final_review
+
+
 # finds suggestions via yelp api
 def find_suggestions(location, category, radius, money, is_open=True):
     # convert into meters for yelp api
@@ -45,9 +61,10 @@ def find_suggestions(location, category, radius, money, is_open=True):
 
         final = []
         for business in results:
+            review = get_review(business['id'])
             biz = {'name': business['name'], 'phone': business['display_phone'], 'price': business['price'],
                      'image': business['image_url'], 'rating': business['rating'],
-                     'address': business['location']['display_address'][0] + " " + business['location']['display_address'][1]}
+                     'address': business['location']['display_address'][0] + " " + business['location']['display_address'][1], 'review': review}
             final.append(biz)
 
         return final
