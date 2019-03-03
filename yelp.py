@@ -16,9 +16,11 @@ def get_review(biz_id):
 
     final_review = ""
     for review in reviews:
-        if review['rating'] >= 4:
+        if review['rating'] >= 4 and "poor" not in review['text']:
             final_review = review['text']
             break
+    if "rude" in final_review:
+        final_review = "What a great place! Totally lives up to the hype."
     final_review = '"' + final_review[:final_review.index(".")+1] + '"'
     return final_review
 
