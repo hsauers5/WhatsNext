@@ -21,7 +21,10 @@ def get_review(biz_id):
             break
     if "rude" in final_review:
         final_review = "What a great place! Totally lives up to the hype."
-    final_review = '"' + final_review[:final_review.index(".")+1] + '"'
+    try:
+        final_review = '"' + final_review[:final_review.index(".")+1] + '"'
+    except:
+        final_review = '"' + final_review[:140] + '..."'
     return final_review
 
 
@@ -63,6 +66,7 @@ def find_suggestions(location, category, radius, money, is_open=True):
 
         final = []
         for business in results:
+            # print(business)
             review = get_review(business['id'])
             dist = convert_to_miles(float(business['distance']))
             biz = {'name': business['name'], 'phone': business['display_phone'], 'price': business['price'],
@@ -74,7 +78,7 @@ def find_suggestions(location, category, radius, money, is_open=True):
     except IndexError:
         return []
     except:
-        return []
+       return []
 
 
 # convert to meters for yelp api
