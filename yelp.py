@@ -64,9 +64,11 @@ def find_suggestions(location, category, radius, money, is_open=True):
         final = []
         for business in results:
             review = get_review(business['id'])
+            dist = convert_to_miles(float(business['distance']))
+            print(dist)
             biz = {'name': business['name'], 'phone': business['display_phone'], 'price': business['price'],
                      'image': business['image_url'], 'rating': business['rating'],
-                     'address': business['location']['display_address'][0] + " " + business['location']['display_address'][1], 'review': review}
+                     'address': business['location']['display_address'][0] + " " + business['location']['display_address'][1], 'review': review, 'distance': str(dist) + " mi."}
             final.append(biz)
 
         return final
@@ -79,3 +81,9 @@ def find_suggestions(location, category, radius, money, is_open=True):
 # convert to meters for yelp api
 def convert_to_meters(radius):
     return radius * 1609
+
+
+# convert to miles from yelp api
+def convert_to_miles(distance):
+    return round(distance / 1609, 1)
+
