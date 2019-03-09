@@ -1,6 +1,8 @@
 import creds
 import requests
 import json
+import urllib
+import datetime, time
 
 YELP_API = "Bearer " + creds.get_yelp_creds()
 API_URL = "https://api.yelp.com/v3/businesses/search"
@@ -40,11 +42,12 @@ def find_suggestions(location, category, radius, money, is_open=True):
     params = {
         'term': category,
         'location': location,
-	'categories': 'restaurants',
+	    'categories': 'restaurants',
         'radius': radius,
         'price': money_arr,
         'limit': 10,
-        'open_now': is_open
+        # 'open_now': is_open
+        'open_at': get_unix_time() + 3600  # add one hour to stay open
     }
 
     try:
@@ -90,3 +93,8 @@ def convert_to_meters(radius):
 def convert_to_miles(distance):
     return round(distance / 1609, 1)
 
+
+# returns current time (EST) as a Unix int
+def get_unix_time():
+    ts = time.time()
+    return int(ts)
