@@ -72,7 +72,7 @@ def find_suggestions(location, category, radius, money, is_open=True):
             # print(business)
             review = get_review(business['id'])
             dist = convert_to_miles(float(business['distance']))
-            biz = {'name': business['name'], 'phone': business['display_phone'], 'price': business['price'],
+            biz = {'name': business['name'], 'id':business['id'], 'phone': business['display_phone'], 'price': business['price'],
                      'image': business['image_url'], 'rating': business['rating'],
                      'address': business['location']['display_address'][0] + " " + business['location']['display_address'][1], 'review': review, 'distance': str(dist) + " mi."}
             final.append(biz)
