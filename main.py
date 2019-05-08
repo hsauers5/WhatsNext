@@ -38,7 +38,7 @@ def find():
     else:
         location = request.args['location']
         category = request.args['category']
-        radius = float(request.args['radius'])
+        radius = int(request.args['radius'])
         money = int(request.args['money'])
 
         open = True
