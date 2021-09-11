@@ -6,7 +6,7 @@ import time
 from base64 import b64encode
 import os
 
-    
+
 app = Flask(__name__, static_folder='.', static_url_path='', template_folder='')
 app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -61,7 +61,7 @@ def get_restaurants(location="32816", category="asian", radius="15", price="4"):
   # build html
   
   # create request url
-  api_url = "http://localhost:80/find?"
+  api_url = "http://localhost:4000/find?"
   api_url += "location=" + location + "&category=" + category + "&radius=" + radius + "&money=" + price
 
   print(api_url)
