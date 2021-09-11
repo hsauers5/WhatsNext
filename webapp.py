@@ -5,7 +5,7 @@ import json
 import time
 from base64 import b64encode
 
-
+    
 app = Flask(__name__, static_folder='.', static_url_path='', template_folder='')
 app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
