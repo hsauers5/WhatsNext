@@ -4,6 +4,7 @@ import requests
 import json
 import time
 from base64 import b64encode
+imoprt os
 
     
 app = Flask(__name__, static_folder='.', static_url_path='', template_folder='')
@@ -199,4 +200,6 @@ def show_data():
 
 # start listening
 if __name__ == "__main__":
-  app.run(debug=False, port='5000', host='0.0.0.0')
+  port = os.environ['PORT']
+  print(port)
+  app.run(debug=False, port=port, host='0.0.0.0')
