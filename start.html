@@ -1,0 +1,546 @@
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="next" href="categories.html">
+<head>
+	
+<!--
+
+<script>
+
+if (window.location.hostname != "whatsnext-app.hsauers.net") {
+  window.location = "https://whatsnext-app.hsauers.net/";
+}
+
+</script>
+
+-->
+
+<title>
+  WhatsNext - Discover New Restaurants
+</title>
+
+<meta name="theme-color" content="#406aad"/>
+	
+<meta name="description" content="Take the guesswork out of going out - discover only the hottest, highest-rated open restaurants serving exactly what you're hungry for in just three clicks." />
+
+<link rel="canonical" href="https://app.whatsnext.fyi/" />
+
+<link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+	
+<meta property="og:url" content="https://app.whatsnext.fyi/" />
+
+<meta property="og:title" content="WhatsNext: Find The Best New Restaurants" />
+
+<meta property="og:description" content="Discover only the hottest, highest-rated open restaurants with exactly what you're hungry for." />
+
+<meta property="og:image" content="https://raw.githubusercontent.com/hsauers5/WhatsNextFlask/master/img/burger.png" />
+
+
+<style type="text/css">
+	html { 
+	  background: url('https://raw.githubusercontent.com/hsauers5/WhatsNextFlask/master/img/mainbackground.jpg') no-repeat center center fixed;
+	  -webkit-background-size: cover;
+	  -moz-background-size: cover;
+	  -o-background-size: cover;
+	  background-size: cover;
+	}
+	body {
+		background-repeat: no-repeat;
+	}
+	.container {
+    height: 100%;
+		font-family: Arial;
+		background-repeat: no-repeat;
+    }
+	.start-button {
+		background-color: #42b0f4;
+    color: #FFFFFF;
+		border-color: #42b0f4;
+		font-family: Arial;
+		font-size: 18px;
+    padding: 10px;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    margin: 0px
+	}
+.skip-button {
+		background-color: #42b0f4;
+    color: #FFFFFF;
+		border-color: #42b0f4;
+		font-family: Arial;
+		font-size: 14px;
+    padding: 8px;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    margin: 0px
+	}
+  .searchbtn {
+    background-color: #42b0f4;
+    color: #FFFFFF;
+		border-color: #42b0f4;
+		font-family: Arial;
+		font-size: 14px;
+    padding: 6px;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    margin: 0px
+  }
+	.intro {
+		position: absolute;
+		top: 45%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+</style>
+	
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-139974097-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-139974097-1');
+</script>
+
+<script>
+  var lat = 0;
+  var lon = 0;
+  var options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
+  };
+
+  function getLocation() {
+    show('location-modal', false);
+    showLoading();
+    // ensure user doesn't deny location
+    navigator.geolocation.getCurrentPosition(function(position) {
+      console.log("fetching location");
+      showPosition(position);
+      // getLocationController();
+      // getLocationController();
+    },
+    function(error) {
+      if (error.code == error.PERMISSION_DENIED) {
+        alert("Please allow WhatsNext to use your location.");
+        document.location.href="/";
+      }
+    });
+  }
+  function getLocationController() {
+    if (navigator.geolocation) {
+      show('location-modal', false);
+      navigator.geolocation.getCurrentPosition(showPosition, null, options);
+    } else { 
+      alert("Please enable your location services.");
+    }
+  }
+  function showPosition(position) {
+    lat = position.coords.latitude;
+    lon = position.coords.longitude;
+    // alert("Latitude: " + lat + " Longitude: " + lon);
+    redirect();
+  }
+  
+  function redirect() {
+    showLoading();
+    const Http = new XMLHttpRequest();
+    const url="categories?location=" + lat + "," + lon;
+    Http.open("GET", url);
+    Http.send();
+    Http.onreadystatechange=(e)=>{
+      setTimeout(function(){
+        console.log(Http.responseText); window.location.href="categories.html";}, 500);
+    }
+  }
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js')
+  .then(function(response) {
+    
+    // Service worker registration done
+    console.log('Registration Successful', response);
+  }, function(error) {
+    // Service worker registration failed
+    console.log('Registration Failed', error);
+  })
+}
+var lE=document.createElement("link");
+lE.rel="manifest",lE.href="https://app.whatsnext.fyi/app.json",document.head.insertBefore(lE, document.head.firstChild);
+</script>
+
+<script>
+/* OAuth Script */
+function onSignIn(googleUser) {
+  // hide auth, show start button
+  skip();
+  var profile = googleUser.getBasicProfile();
+  // id = profile.getId(); // Do not send to your backend! Use an ID token instead.
+  idtoken = googleUser.getAuthResponse().id_token;
+  name = profile.getName();
+  // console.log('Image URL: ' + profile.getImageUrl();
+  email = profile.getEmail(); // This is null if the 'email' scope is not present.
+  console.log("Name: " + name + "\nEmail: " + email);
+  // send to server
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'oauth', true);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.send('idtoken=' + idtoken + "&email=" + email + "&name=" + name);
+  xhr.onload = function() {
+    console.log('Response: ' + xhr.responseText);
+  };
+}
+function skip() {
+  // hide auth, show start button
+  // getLocation();
+  show('auth-table', false);
+  show('start-btn', true);
+}
+
+</script>
+
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+<!--
+  Prod ID: 374998941431-pj5e9els46se88lbqa3q2mr31bjrtvve.apps.googleusercontent.com
+
+  FYI ID: 374998941431-ab7notpq6hur5ke8cvvbtp9phcqp9l2l.apps.googleusercontent.com
+
+  Dev ID:
+  141475774730-su19sf4n8s4og04ktn5idlmgrqch6fmm.apps.googleusercontent.com
+  -->
+<meta name="google-signin-client_id" content="374998941431-ab7notpq6hur5ke8cvvbtp9phcqp9l2l.apps.googleusercontent.com">
+
+
+</head>
+
+<body  onload="install()">
+
+	<div id="main" class="container" style="">
+		
+		<div class="intro" style="width: 340px">
+
+		<center>
+		<img style="padding-top: 0px; padding-bottom: 40px;" src="https://raw.githubusercontent.com/hsauers5/WhatsNextFlask/master/img/icon-144x144.png" />
+		</center>
+
+			<h1 style="color: #5e9ca0; text-align: center; font-style: oblique;"><span style="color: #ffffff;">Take The Guesswork Out Of Going Out</span></h1>
+
+      <!-- "Top Acclaimed" -->
+      <h3 style="color: #5e9ca0; text-align: center; font-style: oblique;"><span style="color: #ffffff;">discover only the best, highest-rated restaurants with exactly what you're hungry for</span></h3>
+
+			<p style="text-align: center; display: none;" id="start-btn">
+				<button class="start-button" onclick='pickLocation();'> Get Started </button>
+			</p>
+
+      <center>
+      <table id="auth-table">
+        <tr>
+          <td>
+            <center>
+              <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            </center>
+          </td>
+          <td>
+            <center>
+              <button class="skip-button" onclick='pickLocation();'> Just Show Me </button>
+            </center>
+          </td>
+        </tr>
+      </table>
+      </center>
+
+		</div>
+	</div>
+
+
+  <!-- Page Load -->
+<script>
+function show(id, value) {
+    document.getElementById(id).style.display = value ? 'block' : 'none';
+}
+function showLoading() {
+    // alert(loading);
+    // show('page', true);
+    show('loading', true);
+};
+/*
+*/
+</script>
+<style>
+#loading {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    background-image: url("https://cdn.dribbble.com/users/636337/screenshots/4505682/cube-change-loading.gif");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+</style>
+<div id="loading"></div>
+
+
+
+<!-- Mobile Modals -->
+
+<style>
+#android-modal {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    background-image: url('https://raw.githubusercontent.com/hsauers5/WhatsNextFlask/master/img/mainbackground.jpg')
+}
+#ios-modal {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    background-image: url('https://raw.githubusercontent.com/hsauers5/WhatsNextFlask/master/img/mainbackground.jpg')
+}
+#location-modal {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.98);
+    background-image: url('https://raw.githubusercontent.com/hsauers5/WhatsNextFlask/master/img/mainbackground.jpg')
+}
+.modal-dialog {
+    position: fixed;
+		bottom: 0;
+		background-color: #282828;
+		min-height: 97%; 
+		min-width: 100%;
+		opacity: 0.95;
+		padding-bottom: 50px;
+	}
+	.modal-content {
+		position: absolute;
+		top: 45%;
+		left: 50%;
+    width: 100%;
+		transform: translate(-50%, -50%);
+	}
+	.button-back {
+		background-color: #42b0f4;
+    color: #FFFFFF;
+		border-color: #42b0f4;
+		font-family: Arial;
+		font-size: 18px;
+    padding: 10px;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    margin: 0px;
+		min-height: 50px;		
+		min-width: 100px;
+	}
+</style>
+
+<script>
+    function install() {
+    thisCookie = document.cookie;
+    if ( true && ! (thisCookie.includes("noInstall") && thisCookie.includes("noInstall1"))) {
+      // if iphone, redirect to instructions
+      if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+        show('ios-modal', true);
+      }
+      // if android, redirect to instructions
+      if (navigator.userAgent.match(/Android/i)) {
+        /* Android App now in production - not needed */
+        // show('android-modal', true);
+      }
+    }
+  }
+
+
+  function setCookie(c_name,value,exdays) {
+      var exdate=new Date();
+      exdate.setDate(exdate.getDate() + exdays);
+      var c_value=escape(value) + ("; expires="+exdate.toUTCString());
+      document.cookie=c_name + "=" + c_value;
+  }
+
+  function noThanks() {
+    // showLoading();
+    // alert(document.cookie);
+    /*
+    if (cookieDict['noInstall'] == null) {
+      cookieDict['noInstall'] = numNoInstalls;
+    }
+    */
+	  
+    if (document.cookie.includes("noInstall")) {
+      setCookie("noInstall1", "1", 365*10)
+    } else {
+      // set cookie to asked once - should opt out twice.
+      
+      setCookie("noInstall", "1", 365*10)
+    }
+    
+    show("android-modal", false);
+    show("ios-modal", false);
+    
+  }
+</script>
+
+<div id="android-modal">
+<div class="modal-fade" id="install-modal" tabindex="-1" role="dialog" aria-labelledby="install-modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		
+		<center>
+		<h1 class="modal-title" id="install-modalLabel" style="color: #ffffff; font-size: 36; font-family: Arial;">Install WhatsNext</h1>
+		</center>
+      </div>
+	  <center>
+      <div class="modal-body">
+        <img src="https://raw.githubusercontent.com/hsauers5/WhatsNextFlask/master/images/icons/icon-144x144.png" />
+<p>
+<!-- <img src="https://raw.githubusercontent.com/hsauers5/WhatsNextFlask/master/add.png" height=130px, width=600px /> -->
+  <h3 class="modal-instructions" style="color: #ffffff; font-size: 18; font-family: Arial;font-style: oblique;"> 
+    Tap "Options" in your browser,<p> then tap "Add to home screen"
+  </h3>
+      </div>
+      <div class="modal-footer">
+	  <button class="button-back" onclick="noThanks()"> No Thanks </button>
+      </div>
+	  </center>
+    </div>
+  </div>
+</div>
+</div>
+<div id="ios-modal">
+  <div class="modal-fade" id="install-modal" tabindex="-1" role="dialog" aria-labelledby="install-modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		
+		<center>
+		<h1 class="modal-title" id="install-modalLabel" style="color: #ffffff; font-size: 36; font-family: Arial;">Install WhatsNext</h1>
+		</center>
+      </div>
+	  <center>
+      <div class="modal-body">
+        <img src="https://raw.githubusercontent.com/hsauers5/WhatsNextFlask/master/images/icons/icon-144x144.png" />
+<p>
+<!-- <img src="https://raw.githubusercontent.com/hsauers5/WhatsNextFlask/master/add.png" height=130px, width=600px /> -->
+
+  <h3 class="modal-instructions" style="color: #ffffff; font-size: 18; font-family: Arial;font-style: oblique;"> 
+    <img src="https://raw.githubusercontent.com/hsauers5/WhatsNextFlask/master/add.png" height=auto, width=auto />
+  </h3>
+
+      </div>
+      <div class="modal-footer">
+	  <button class="button-back" onclick="noThanks()"> No Thanks </button>
+      </div>
+	  </center>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+function pickLocation() {
+  show('location-modal', true);
+}
+// pickLocation();
+
+function pickNewLocation() {
+  show('current-button', false);
+  show('another-button', false);
+  show('zipcode-search', true)
+}
+
+function searchLocation() {
+  var myLocationChoice = document.getElementById("category-search").value;
+  if (myLocationChoice != "" && myLocationChoice != null) {
+    searchWithLocation(myLocationChoice);
+  }
+}
+
+function searchWithLocation(choice) {
+    showLoading();
+    show('location-modal', false);
+    const Http = new XMLHttpRequest();
+    const url="categories?location=" + choice;
+    Http.open("GET", url);
+    Http.send();
+    Http.onreadystatechange=(e)=>{
+      setTimeout(function(){
+        console.log(Http.responseText); window.location.href="categories.html";}, 500);
+    }
+  }
+
+var searchBar = null;
+  window.onload=function(){
+    searchBar = document.getElementById("category-search");
+    searchBar.value = null;
+    searchBar.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        searchLocation();
+      }
+    });
+  }
+
+</script>
+
+<div id="location-modal">
+  <div class="modal-fade" id="install-modal" tabindex="-1" role="dialog" aria-labelledby="install-modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		
+		<center>
+		<h1 class="modal-title" id="install-modalLabel" style="color: #ffffff; font-size: 36; font-family: Arial;">Where To?</h1>
+		</center>
+      </div>
+	  <center>
+      <div class="modal-body">
+        <img src="https://raw.githubusercontent.com/hsauers5/WhatsNextFlask/master/images/icons/icon-144x144.png" />
+<p>
+<!-- <img src="https://raw.githubusercontent.com/hsauers5/WhatsNextFlask/master/add.png" height=130px, width=600px /> -->
+
+      </div>
+      <div class="modal-footer">
+	  	  <button id="current-button" class="start-button" onclick="getLocation()"> Current Location </button>
+    <button id="another-button" class="start-button" onclick="pickNewLocation()"> Choose Another </button>
+    <div id="zipcode-search" style="display: none;">
+    <center>
+      <h3 style="color: #ffffff; text-align: center; font-style: oblique;"><input type="text" id="category-search" name="category-search" placeholder="San Francisco, 32816, Downtown Tampa" style="height: 33px;">  <button class="searchbtn" onclick="searchLocation()">search</button></h3>
+    </center>
+    </div>
+      </div>
+	  </center>
+    </div>
+  </div>
+</div>
+</div>
+
+</body>
+</html>

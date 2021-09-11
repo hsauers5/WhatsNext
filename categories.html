@@ -1,0 +1,190 @@
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="next" href="prices.html">
+<head>
+<style type="text/css">
+	html { 
+	  background: url(https://raw.githubusercontent.com/hsauers5/KnighthacksFrontend/master/app/assets/WoodBackground.jpg)
+	  no-repeat center center fixed;
+	  -webkit-background-size: cover;
+	  -moz-background-size: cover;
+	  -o-background-size: cover;
+	  background-size: cover;
+	}
+	body {
+		background-repeat: no-repeat;
+	}
+	.container {
+		font-family: Arial;
+		background-repeat: no-repeat;
+    }
+	.start-button {
+		background-color: #42b0f4;
+        color: #FFFFFF;
+		border-color: #42b0f4;
+		font-family: Arial;
+		font-size: 18px;
+        padding: 10px;
+        border-radius: 0px;
+        -moz-border-radius: 0px;
+        -webkit-border-radius: 0px;
+        margin: 0px
+	}
+	.table {
+		position: absolute;
+		top: 45%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+    max-height: 100%;
+	}
+	.categoryimg {
+		max-width: 180px;
+		max-height: 180px;
+	}
+	
+	.question {
+		font-style: oblique;
+	}
+  .searchbtn {
+    background-color: #42b0f4;
+    color: #FFFFFF;
+		border-color: #42b0f4;
+		font-family: Arial;
+		font-size: 14px;
+    padding: 6px;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    margin: 0px
+  }
+</style>
+	
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-139974097-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-139974097-1');
+</script>
+
+<script>
+  function nextPage(choice) {
+    showLoading();
+    const Http = new XMLHttpRequest();
+    const url="prices?category=" + choice;
+    Http.open("GET", url);
+    Http.send();
+    Http.onreadystatechange=(e)=>{
+      setTimeout(function(){
+        console.log(Http.responseText); window.location.href="prices.html";}, 500);
+    }
+  }
+
+  var searchBar = null;
+  window.onload=function(){
+  
+    searchBar = document.getElementById("category-search");
+    searchBar.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        search();
+      }
+    });
+  }
+
+  function search() {
+    nextPage(searchBar.value);
+  }
+</script>
+
+</head>
+
+<body>
+
+	<div id="main" class="container" style="">
+	<div class="table">
+	<center>
+		<h1 class="question" style="color: #5e9ca0; text-align: center; padding-top: 20px;"><span style="color: #ffffff;">what are you feeling?</span></h1>
+    <center>
+      <h3 style="color: #ffffff; text-align: center; font-style: oblique;"><input type="text" id="category-search" name="category-search" placeholder="pizza, coffee, sandwiches" style="height: 33px;">  <button class="searchbtn" onclick="search()">search</button></h3>
+    </center>
+		<table>
+			<tr>
+			<td style="text-align:center; vertical-align:middle">
+			<a href="javascript: nextPage('american');" class="categoryimg">
+				<img class="categoryimg" src="https://raw.githubusercontent.com/hsauers5/KnighthacksFrontend/master/app/assets/American.png" />
+			</a>
+			</td>
+			<td style="text-align:center; vertical-align:middle">
+			<a href="javascript: nextPage('mexican');" class="categoryimg">
+				<img class="categoryimg" src="https://raw.githubusercontent.com/hsauers5/KnighthacksFrontend/master/app/assets/mexican.png" />
+			</a>
+			</td>
+			</tr>
+			
+						<tr>
+			<td style="text-align:center; vertical-align:middle">
+			<a href="javascript: nextPage('asian');" class="categoryimg">
+				<img class="categoryimg" src="https://raw.githubusercontent.com/hsauers5/KnighthacksFrontend/master/app/assets/Asian.png" />
+			</a>
+			</td>
+			<td style="text-align:center; vertical-align:middle">
+			<a href="javascript: nextPage('seafood');" class="categoryimg">
+				<img class="categoryimg" src="https://raw.githubusercontent.com/hsauers5/KnighthacksFrontend/master/app/assets/Seafood.png" />
+			</a>
+			</td>
+			</tr>
+			
+						<tr>
+			<td style="text-align:center; vertical-align:middle">
+			<a href="javascript: nextPage('vegan');" class="categoryimg">
+				<img class="categoryimg" src="https://raw.githubusercontent.com/hsauers5/KnighthacksFrontend/master/app/assets/Vegan.png" />
+			</a>
+			</td>
+			<td style="text-align:center; vertical-align:middle">
+			<a href="javascript: nextPage('fancy');" class="categoryimg">
+				<img class="categoryimg" src="https://raw.githubusercontent.com/hsauers5/KnighthacksFrontend/master/app/assets/UpScale.png" />
+			</a>
+			</td>
+			</tr>
+		</table>
+		</center>
+	</div>
+		
+	</div>
+
+
+<!-- Page Load -->
+<script>
+
+function show(id, value) {
+    document.getElementById(id).style.display = value ? 'block' : 'none';
+}
+
+function showLoading() {
+    // alert(loading);
+    // show('page', true);
+    show('loading', true);
+};
+
+</script>
+<style>
+#loading {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    background-image: url("https://cdn.dribbble.com/users/636337/screenshots/4505682/cube-change-loading.gif");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+</style>
+<div id="loading"></div>
+
+</body>
+</html>
