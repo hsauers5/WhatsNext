@@ -4,7 +4,7 @@ import requests
 import json
 import time
 from base64 import b64encode
-imoprt os
+import os
 
     
 app = Flask(__name__, static_folder='.', static_url_path='', template_folder='')
