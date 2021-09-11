@@ -1,3 +1,4 @@
 flask
 flask_api
 requests
+flask_compress
