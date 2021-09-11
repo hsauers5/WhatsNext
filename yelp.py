@@ -80,8 +80,8 @@ def find_suggestions(location, category, radius, money, is_open=True):
         return final
     except IndexError:
         return []
-    except:
-       return []
+    # except:
+    #    return []
 
 
 # convert to meters for yelp api
